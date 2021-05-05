@@ -25,6 +25,7 @@ function App() {
           <Switch>
             <Route exact path="/"><Form /></Route>
             <Route path="/list"><List /></Route>
+            <Route path="/user"><Form /></Route>
           </Switch>
         </Container>
       </Router>

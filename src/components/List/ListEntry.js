@@ -1,28 +1,35 @@
-import { Typography, Grid, Button, Divider } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 function ListEntry(props) {
 
-  const [data, setData] = useState({name:"", email:"", phone:"", Address:""});
+  const [data, setData] = useState({id:null, name:"", email:"", phone:"", Address:""});
+  const history = useHistory();
 
   useEffect(() => {
+    const id = props._id || null;
     const name = props.name || "Name";
     const email = props.email || "Email";
     const phone = props.phone || "Phone Number";
     const address = props.address || "Address";
 
-    setData({name:name, email:email, phone:phone, address:address});
+    setData({id:id, name:name, email:email, phone:phone, address:address});
   },[props])
+
+  function gotoEdit(id) {
+    history.push('/user/'+id);
+  }
 
   return(
     <Grid container>
       <Grid item xs={8}>
         <Typography>{data.name}</Typography>
-        <Typography>{data.email} | {data.phone}</Typography>
-        <Typography>{data.address}</Typography>
+        <Typography style={{color:"#999"}}>{data.email} | {data.phone}</Typography>
+        <Typography style={{color:"#999"}}>{data.address}</Typography>
       </Grid>
       <Grid item xs={2}>
-        <Button variant="outlined" color="primary">EDIT</Button>
+        <Button variant="outlined" color="primary" onClick={() => gotoEdit(data.id)}>EDIT</Button>
       </Grid>
       <Grid item xs={2}>
         <Button variant="outlined" color="primary" fullWidth>DELETE</Button>

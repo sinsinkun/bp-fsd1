@@ -1,7 +1,7 @@
 import { Button, Grid, TextField, IconButton } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import envFile from '../env.json';
 
 const formParent = {
@@ -19,7 +19,9 @@ function Form() {
   const [address, setAddress] = useState("");
   const [showMap, setShowMap] = useState(false);
   const [query, setQuery] = useState("");
+  const mapFrame = useRef();
   const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     if (location.pathname.includes("/user/")) {
@@ -29,7 +31,8 @@ function Form() {
 
   function submitForm(e) {
     e.preventDefault();
-    // ...
+    // send data to API endpoint /api/user
+    history.push("/list");
   }
 
   function clearForm() {
@@ -37,16 +40,30 @@ function Form() {
     setEmail("");
     setPhone("");
     setAddress("");
-    setShowMap(false);
+    if (showMap) hideMap();
   }
 
   function searchMap() {
+    // if map already visible, hide map
+    if (showMap) {
+      hideMap();
+      return;
+    }
+    // exit early if no search term
     if (address.length < 1) {
       console.log("no search term");
       return;
     }
     setQuery( address.replace(" ","+") );
     setShowMap(true);
+  }
+
+  function hideMap() {
+    // mapFrame.current.classList.add("close");
+    // setTimeout(() => {
+    //   setShowMap(false);
+    // }, 490)
+    setShowMap(false);
   }
 
   return(
@@ -79,9 +96,11 @@ function Form() {
       </form>
       {/* Google Map Display */}
       {showMap ? 
-        <iframe title="Google Maps" loading="lazy"
-          src={`https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${query}`}>
-        </iframe>
+        <div className="map" ref={mapFrame}>
+          <iframe title="Google Maps" loading="lazy" 
+            src={`https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${query}`}>
+          </iframe>
+        </div>
       : ""}
     </div>
   )

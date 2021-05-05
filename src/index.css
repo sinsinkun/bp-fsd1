@@ -11,8 +11,16 @@ iframe {
   display: block;
   width: 90%;
   aspect-ratio: 1.5;
-  margin: 2rem auto;
+  margin:auto;
+}
+
+.map {
+  margin:2rem 0;
   animation: gmap-in 0.5s ease-out;
+}
+
+.map.close {
+  animation: gmap-out 0.5 ease-out;
 }
 
 @keyframes gmap-in {
@@ -23,5 +31,16 @@ iframe {
   100% { 
     opacity: 100%;
     transform: translateY(0);
+  }
+}
+
+@keyframes gmap-out {
+  0% { 
+    opacity: 100%;
+    transform: translateY(0);
+  }
+  100% { 
+    opacity: 0%;
+    transform: translateY(100px);
   }
 }

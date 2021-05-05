@@ -1,17 +1,34 @@
+import { Container } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
+import Navbar from './components/Navbar';
+import Form from './components/Form';
+import List from './components/List/List';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#651fff"
+    },
+    secondary: {
+      main: "#fff"
+    }
+  }
+})
 
 function App() {
   return (
-    <div className="App">
+    <MuiThemeProvider theme={theme}>
       <Router>
-        Navbar
-        <Switch>
-          <Route exact link="/">Form</Route>
-          <Route link="/list">List of entries</Route>
-        </Switch>
+        <Navbar />
+        <Container maxWidth="md" style={{ marginTop: "64px" }}>
+          <Switch>
+            <Route exact path="/"><Form /></Route>
+            <Route path="/list"><List /></Route>
+          </Switch>
+        </Container>
       </Router>
-    </div>
+    </MuiThemeProvider>
   );
 }
 

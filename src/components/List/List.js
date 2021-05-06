@@ -17,15 +17,15 @@ function UserList() {
 
   useEffect(() => {
     async function apiCall() {
+      if (!store.showLoad) setStore({do:"toggleLoading"});
       const data = await fetch("https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users")
       .then(r => r.json())
       .catch(err => console.log(err));
       
       setUserData(data || []);
+      setStore({do:"toggleLoading"});
     }
-    if (!store.showLoad) setStore({do:"toggleLoading"});
     apiCall();
-    setStore({do:"toggleLoading"});
     // eslint-disable-next-line
   },[refresh])
 

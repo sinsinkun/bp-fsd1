@@ -1,7 +1,7 @@
 import { createContext, useReducer, useContext } from "react";
 
 const initialData = {
-  showLoad: true
+  showLoad: false
 };
 
 /*! IMPORTANT all your reducer functionality goes here */

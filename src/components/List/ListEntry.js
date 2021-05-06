@@ -21,6 +21,12 @@ function ListEntry(props) {
     history.push('/user/'+id);
   }
 
+  async function deleteEntry(id) {
+    await fetch(`https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users?id=${id}`, 
+    { method:"DELETE" }).catch(err => console.log(err));
+    props.refreshPage();
+  }
+
   return(
     <Grid container>
       <Grid item xs={8}>
@@ -32,7 +38,7 @@ function ListEntry(props) {
         <Button variant="outlined" color="primary" onClick={() => gotoEdit(data.id)}>EDIT</Button>
       </Grid>
       <Grid item xs={2}>
-        <Button variant="outlined" color="primary" fullWidth>DELETE</Button>
+        <Button variant="outlined" color="primary" fullWidth onClick={() => deleteEntry(data.id)}>DELETE</Button>
       </Grid>
     </Grid>
   )

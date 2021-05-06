@@ -5,6 +5,11 @@ import ListEntry from "./ListEntry";
 function UserList() {
 
   const [userData, setUserData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  function refreshPage() {
+    setRefresh(prev => !prev);
+  }
 
   useEffect(() => {
     async function apiCall() {
@@ -15,13 +20,13 @@ function UserList() {
       setUserData(data || []);
     }
     apiCall();
-  },[])
+  },[refresh])
 
   return(
     <List aria-label="user list">
       {userData.map(user => 
         <ListItem divider key={user._id}>
-          <ListEntry {...user} />
+          <ListEntry {...user} refreshPage={refreshPage} />
         </ListItem>
       )}
     </List>

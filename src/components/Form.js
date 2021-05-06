@@ -24,18 +24,34 @@ function Form() {
   const history = useHistory();
 
   useEffect(() => {
+    async function lookUpUser(id) {
+      const data = await fetch(`https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users?id=${id}`)
+      .then(r => r.json())
+      .catch(err => console.log(err));
+
+      if (data.name) setName(data.name);
+      if (data.email) setEmail(data.email);
+      if (data.phone) setPhone(data.phone);
+      if (data.address) setAddress(data.address);
+    }
     if (location.pathname.includes("/user/")) {
-      console.log("look up user", location.pathname.replace("/user/",""));
+      lookUpUser(location.pathname.replace("/user/",""));
     }
   }, [location])
 
   async function submitForm(e) {
     e.preventDefault();
+    let payload = { name:name, email:email, phone:phone, address:address };
+    // attach id if exists
+    if (location.pathname.includes("/user/")) {
+      console.log("edit user", location.pathname.replace("/user/",""));
+      payload.id = location.pathname.replace("/user/","");
+    }
     // send data to API endpoint /api/user
     await fetch("https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users", {
       method:"POST",
-      headers: { "Content-Type":"application/json", "Origin":"http://localhost:3000/" },
-      body: JSON.stringify({ name:name, email:email, phone:phone, address:address }) 
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify(payload) 
     }).catch(err => console.log(err));
 
     // redirect to list page
@@ -43,6 +59,16 @@ function Form() {
   }
 
   function clearForm() {
+    // if currently in "edit" mode, delete entry
+    if (location.pathname.includes("/user/")) {
+      const id = location.pathname.replace("/user/","");
+      // note: does not need to await execution of deletion
+      fetch(`https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users?id=${id}`, 
+      { method:"DELETE" }).catch(err => console.log(err));
+      // move back to index
+      history.push("/");
+    }
+    // clear forms
     setName("");
     setEmail("");
     setPhone("");

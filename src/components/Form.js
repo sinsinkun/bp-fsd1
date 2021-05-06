@@ -20,10 +20,10 @@ function Form() {
   const [address, setAddress] = useState("");
   const [showMap, setShowMap] = useState(false);
   const [query, setQuery] = useState("");
+  
   const mapFrame = useRef();
   const location = useLocation();
   const history = useHistory();
-
   const [store, setStore] = useStoreContext();
 
   useEffect(() => {
@@ -51,7 +51,6 @@ function Form() {
     let payload = { name:name, email:email, phone:phone, address:address };
     // attach id if exists
     if (location.pathname.includes("/user/")) {
-      console.log("edit user", location.pathname.replace("/user/",""));
       payload.id = location.pathname.replace("/user/","");
     }
     // send data to API endpoint /api/user

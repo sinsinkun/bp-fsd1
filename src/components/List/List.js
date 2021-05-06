@@ -8,7 +8,7 @@ function UserList() {
 
   useEffect(() => {
     async function apiCall() {
-      const data = await fetch("https://elu249nmfh.execute-api.us-east-2.amazonaws.com/default/users")
+      const data = await fetch("https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users")
       .then(r => r.json())
       .catch(err => console.log(err));
       

@@ -29,9 +29,16 @@ function Form() {
     }
   }, [location])
 
-  function submitForm(e) {
+  async function submitForm(e) {
     e.preventDefault();
     // send data to API endpoint /api/user
+    await fetch("https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users", {
+      method:"POST",
+      headers: { "Content-Type":"application/json", "Origin":"http://localhost:3000/" },
+      body: JSON.stringify({ name:name, email:email, phone:phone, address:address }) 
+    }).catch(err => console.log(err));
+
+    // redirect to list page
     history.push("/list");
   }
 

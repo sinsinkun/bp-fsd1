@@ -9,10 +9,10 @@ function ListEntry(props) {
 
   useEffect(() => {
     const id = props._id || null;
-    const name = props.name || "Name";
-    const email = props.email || "Email";
-    const phone = props.phone || "Phone Number";
-    const address = props.address || "Address";
+    const name = props.name || "(No Name)";
+    const email = props.email || "(No Email)";
+    const phone = props.phone || "(No Phone Number)";
+    const address = props.address || "(No Address)";
 
     setData({id:id, name:name, email:email, phone:phone, address:address});
   },[props])

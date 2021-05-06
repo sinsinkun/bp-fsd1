@@ -1,11 +1,13 @@
 import { Typography, Grid, Button } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useStoreContext } from '../GlobalStore';
 
 function ListEntry(props) {
 
   const [data, setData] = useState({id:null, name:"", email:"", phone:"", Address:""});
   const history = useHistory();
+  const [store, setStore] = useStoreContext();
 
   useEffect(() => {
     const id = props._id || null;
@@ -22,6 +24,7 @@ function ListEntry(props) {
   }
 
   async function deleteEntry(id) {
+    if (!store.showLoad) setStore({do:"toggleLoading"});
     await fetch(`https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users?id=${id}`, 
     { method:"DELETE" }).catch(err => console.log(err));
     props.refreshPage();

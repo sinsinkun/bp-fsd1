@@ -2,6 +2,7 @@ import { Button, Grid, TextField, IconButton } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import { useEffect, useState, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useStoreContext } from './GlobalStore';
 import envFile from '../env.json';
 
 const formParent = {
@@ -23,8 +24,11 @@ function Form() {
   const location = useLocation();
   const history = useHistory();
 
+  const [store, setStore] = useStoreContext();
+
   useEffect(() => {
     async function lookUpUser(id) {
+      if (!store.showLoad) setStore({do:"toggleLoading"});
       const data = await fetch(`https://elu249nmfh.execute-api.us-east-2.amazonaws.com/dev/users?id=${id}`)
       .then(r => r.json())
       .catch(err => console.log(err));
@@ -33,14 +37,17 @@ function Form() {
       if (data.email) setEmail(data.email);
       if (data.phone) setPhone(data.phone);
       if (data.address) setAddress(data.address);
+      setStore({do:"toggleLoading"});
     }
     if (location.pathname.includes("/user/")) {
       lookUpUser(location.pathname.replace("/user/",""));
     }
+    // eslint-disable-next-line
   }, [location])
 
   async function submitForm(e) {
     e.preventDefault();
+    if (!store.showLoad) setStore({do:"toggleLoading"});
     let payload = { name:name, email:email, phone:phone, address:address };
     // attach id if exists
     if (location.pathname.includes("/user/")) {
@@ -55,6 +62,7 @@ function Form() {
     }).catch(err => console.log(err));
 
     // redirect to list page
+    setStore({do:"toggleLoading"});
     history.push("/list");
   }
 

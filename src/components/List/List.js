@@ -1,14 +1,18 @@
 import { List, ListItem } from '@material-ui/core';
 import { useEffect, useState } from 'react';
+import { useStoreContext } from '../GlobalStore';
 import ListEntry from "./ListEntry";
 
 function UserList() {
 
   const [userData, setUserData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  
+  const [store, setStore] = useStoreContext();
 
   function refreshPage() {
     setRefresh(prev => !prev);
+    if (store.showLoad) setStore({do:"toggleLoading"});
   }
 
   useEffect(() => {
@@ -19,7 +23,10 @@ function UserList() {
       
       setUserData(data || []);
     }
+    if (!store.showLoad) setStore({do:"toggleLoading"});
     apiCall();
+    setStore({do:"toggleLoading"});
+    // eslint-disable-next-line
   },[refresh])
 
   return(
